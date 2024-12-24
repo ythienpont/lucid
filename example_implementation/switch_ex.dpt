@@ -18,7 +18,7 @@ type ip_t = {
 event eth_ip(eth_t eth, ip_t ip);
 event prepare_report(eth_t eth, ip_t ip);
 event report(int src, int dst, int<16> len) {skip;}
-event packet_forwarded(eth_t eth, ip_t ip, int<9> port);
+event packet_forwarded(eth_t eth, ip_t ip);
 event packet_dropped(eth_t eth, ip_t ip);
 
 /********** Tables *********/
@@ -56,7 +56,7 @@ handle eth_ip(eth_t eth, ip_t ip) {
         // Generate report if the packet matches the filter
         generate(prepare_report(eth, ip));
         // Handle packet forwarding
-        generate(packet_forwarded(eth, ip, OUT_PORT));
+        generate(packet_forwarded(eth, ip));
     } else {
         // Drop the packet if it doesn't match
         generate(packet_dropped(eth, ip));
@@ -69,9 +69,10 @@ handle prepare_report(eth_t eth, ip_t ip) {
     // Handle the report event (can be extended if necessary)
 }
 
-handle packet_forwarded(eth_t eth, ip_t ip, int<9> port) {
+// Handler with byte-aligned port parameter
+handle packet_forwarded(eth_t eth, ip_t ip) {
     // Log the packet forwarding event
-    printf("Packet forwarded: src=%d, dst=%d, len=%d, port=%d", ip#src, ip#dst, ip#len, port);
+    printf("Packet forwarded: src=%d, dst=%d, len=%d", ip#src, ip#dst, ip#len);
     // Additional logic for forwarding can go here if needed
 }
 

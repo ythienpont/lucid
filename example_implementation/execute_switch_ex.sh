@@ -1,10 +1,23 @@
 #!/bin/bash
 
-# Change directory to 'lucid'
-cd ../lucid || { echo "Failed to change directory to 'lucid'. Exiting."; exit 1; }
+# Set environment variables for directory and file paths
+LUCID_DIR="../lucid"
+EXAMPLE_DIR="../example_implementation"
+DPT_FILE="$EXAMPLE_DIR/switch_ex.dpt"
+EXPECTED_FILE="$EXAMPLE_DIR/switch_ex_expected.txt"
 
-# Run the command and redirect output to switch_ex_expected.txt
-./docker_lucid.sh interpret ../example_implementation/switch_ex.dpt > ../example_implementation/switch_ex_expected.txt 2>&1
+# Change to the 'lucid' directory or exit if it fails
+cd "$LUCID_DIR" || { echo "Failed to change directory to '$LUCID_DIR'. Exiting."; exit 1; }
 
-# Inform the user
-echo "Output has been written to switch_ex_expected.txt"
+# Run the 'interpret' command and redirect both stdout and stderr to the expected file
+./docker_lucid.sh interpret "$DPT_FILE" > "$EXPECTED_FILE" 2>&1
+
+# Inform the user where interpreter output has been written
+echo "Interpreter output has been written to $EXPECTED_FILE"
+
+# Run the 'compile' command to generate the equivalent P4 code
+./docker_lucid.sh compile "$DPT_FILE"
+
+# Inform the user of successfull compilation
+echo "$DPT_FILE successfully compiled"
+
