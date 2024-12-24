@@ -1,0 +1,82 @@
+const int<9> OUT_PORT = 1;
+const int<9> SERVER_PORT = 2;
+const int<9> DROP_PORT = 3;  // Port for dropped packets
+
+type eth_t = {
+    int<48> dmac;
+    int<48> smac;
+    int<16> etype;
+}
+
+type ip_t = {
+    int src;
+    int dst;
+    int<16> len;
+}
+
+/********** Events *********/
+event eth_ip(eth_t eth, ip_t ip);
+event prepare_report(eth_t eth, ip_t ip);
+event report(int src, int dst, int<16> len) {skip;}
+event packet_forwarded(eth_t eth, ip_t ip, int<9> port);
+event packet_dropped(eth_t eth, ip_t ip);
+
+/********** Tables *********/
+action bool mk_result(bool b)() {
+    return b;
+}
+
+type key_t = {
+    int s;
+    int d;
+}
+
+/*
+    Table.create(num_entries, possible_actions (list), default_action, default_action_installtime_arg);
+*/
+global Table.t<<key_t, bool, (), bool>> filter_table = Table.create(1024, [mk_result], mk_result, false);
+
+/********** Filtering functions *********/
+fun bool filter_with_table(ip_t ip) {
+    bool r = Table.lookup(
+        filter_table,
+        {s=ip#src; d=ip#dst},
+        () // () just means there is no runtime argument
+    );
+    return r;
+}
+
+/********** Handlers *********/
+handle eth_ip(eth_t eth, ip_t ip) {
+    // Forward the packet to OUT_PORT
+    generate_port(OUT_PORT, eth_ip(eth, ip));
+
+    // Check if the packet matches the filter
+    if (filter_with_table(ip)) {
+        // Generate report if the packet matches the filter
+        generate(prepare_report(eth, ip));
+        // Handle packet forwarding
+        generate(packet_forwarded(eth, ip, OUT_PORT));
+    } else {
+        // Drop the packet if it doesn't match
+        generate(packet_dropped(eth, ip));
+    }
+}
+
+handle prepare_report(eth_t eth, ip_t ip) {
+    event r = report(ip#src, ip#dst, ip#len);
+    generate_port(SERVER_PORT, r);
+    // Handle the report event (can be extended if necessary)
+}
+
+handle packet_forwarded(eth_t eth, ip_t ip, int<9> port) {
+    // Log the packet forwarding event
+    printf("Packet forwarded: src=%d, dst=%d, len=%d, port=%d", ip#src, ip#dst, ip#len, port);
+    // Additional logic for forwarding can go here if needed
+}
+
+handle packet_dropped(eth_t eth, ip_t ip) {
+    // Log the packet drop event
+    printf("Packet dropped: src=%d, dst=%d, len=%d", ip#src, ip#dst, ip#len);
+    // Additional logic for dropped packets can go here if needed
+}
