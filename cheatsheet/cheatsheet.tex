@@ -1,0 +1,112 @@
+\documentclass{article}
+\usepackage[landscape]{geometry}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{esint}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{amsmath,amssymb}
+
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\makeatletter
+
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\title{Lucid Cheat Sheet}
+\usepackage[utf8]{inputenc}
+
+\advance\topmargin-.8in
+\advance\textheight3in
+\advance\textwidth3in
+\advance\oddsidemargin-1.5in
+\advance\evensidemargin-1.5in
+\parindent0pt
+\parskip2pt
+\newcommand{\hr}{\centerline{\rule{3.5in}{1pt}}}
+%\colorbox[HTML]{e4e4e4}{\makebox[\textwidth-2\fboxsep][l]{texto}
+\begin{document}
+
+\begin{center}{\huge{\textbf{Lucid Cheat Sheet}}}\\
+\end{center}
+\begin{multicols*}{3}
+
+\tikzstyle{mybox} = [draw=black, fill=white, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
+\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
+
+\tikzstyle{mybox} = [draw=black, fill=white, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
+\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
+
+%------------ Event Declarations ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.45\textwidth}
+\texttt{event foo(type1 id1, type2 id2, ..., typeN idN);}
+\vspace{5pt}
+
+Declares an event named \texttt{foo} that takes arguments \texttt{id1, id2, ..., idN} of types \texttt{type1, type2, ..., typeN}.
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Event Declarations};
+\end{tikzpicture}
+
+%------------ Event Values ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.45\textwidth}
+\texttt{event x = foo(arg1, arg2, ..., argN);}
+\vspace{5pt}
+
+Creates an event value of type \texttt{foo} containing \texttt{arg1, arg2, ..., argN} and stores it in variable \texttt{x}.
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Event Values};
+\end{tikzpicture}
+
+%------------ Event Generation ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.55\textwidth}
+Events are generated using \textbf{generate} statements to serialize events and send them to queues. Types include:
+
+\begin{itemize}[leftmargin=10pt]
+\item \texttt{generate\_port(n, x);} \\ 
+Serializes event \texttt{x} into a packet and sends it to port \texttt{n}.
+\item \texttt{generate\_ports(g, x);} \\ 
+Sends event \texttt{x} to all ports in group \texttt{g}.
+\item \texttt{generate(x);} \\ 
+Queues event \texttt{x} for recirculation on the current switch
+\end{itemize}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Event Generation};
+\end{tikzpicture}
+
+%------------ Packet Events ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.55\textwidth}
+\texttt{packet event foo(type1 id1, type2 id2, ..., typeN idN);}
+\vspace{5pt}
+
+Defines a packet-based event \texttt{foo} where arguments \texttt{id1, id2, ..., idN} are packed directly into the packet. Example:
+
+\texttt{packet event eth\_ip(eth\_hdr\_t eth, ip\_hdr\_t ip, Payload.t pl);}
+
+Enables creation of standard IP packets but requires custom parsers for deserialization.
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Packet Events};
+
+\end{tikzpicture}
+\end{multicols*}
+\end{document}
