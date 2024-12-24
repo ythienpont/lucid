@@ -1,5 +1,10 @@
 ## Switch ex 
 These files implement basic switch features.
+### execute:
+run
+```bash
+./execute_switch_ex.sh
+```
 ### Implementations:
 - Packet Filtering:
 The program uses a table-based filtering mechanism (filter_table) to allow or deny 
