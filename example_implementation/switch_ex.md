@@ -1,31 +1,48 @@
-## Switch ex 
-These files implement basic switch features.
-### execute:
-run
-```bash
-./execute_switch_ex.sh
+# Network Filtering and Handling System
+
+This file defines a packet handling system that processes Ethernet and IP packets, using filters to determine whether to forward or drop them.
+
+## Constants
+
+- `OUT_PORT = 1`: Port for forwarded packets.
+- `SERVER_PORT = 2`: Port for report generation.
+- `DROP_PORT = 3`: Port for dropped packets.
+
+## Types
+
+### Ethernet Packet (`eth_t`)
+
+- `dmac`: Destination MAC address (48 bits)
+- `smac`: Source MAC address (48 bits)
+- `etype`: Ethernet type (16 bits)
+
+### IP Packet (`ip_t`)
+
+- `src`: Source IP address (32 bits)
+- `dst`: Destination IP address (32 bits)
+- `len`: IP packet length (16 bits)
+
+## Events
+
+- `eth_ip`: Triggered by an Ethernet packet with IP.
+- `prepare_report`: Prepares a report based on packet details.
+- `report`: Represents a report with source, destination, and length.
+- `packet_forwarded`: Triggered when a packet is forwarded.
+- `packet_dropped`: Triggered when a packet is dropped.
+
+## Tables
+
+### `filter_table`
+
+A table storing filtering rules based on source and destination IPs.
+
+```c
+global Table.t<<key_t, bool, (), bool>> filter_table = Table.create(1024, [mk_result], mk_result, false);
 ```
-### Implementations:
-- Packet Filtering:
-The program uses a table-based filtering mechanism (filter_table) to allow or deny 
-packets based on predefined rules. Filtering is an essential feature of switches 
-for controlling traffic flow and implementing security policies.
-
-- Forwarding:
-Packets that meet the filtering criteria are forwarded to a specific port (OUT_PORT). This mimics the fundamental behavior of switches in directing packets 
-to their destinations.
-
-- Dropping:
-Packets that do not meet the filtering criteria are explicitly dropped, and the event is logged. This represents another core feature of switches,
-which is traffic control.
-
-- Logging and Reporting:
-The program logs forwarded and dropped packets and generates reports for packets that match certain criteria. This is helpful for debugging, 
-monitoring, and network management.
-
-- Programmability:
-The use of customizable event handlers and tables provides a level of programmability, which is characteristic of Software-Defined Networking 
-(SDN) switches.
-
-- Basic Event Handling:
-Events like packet_forwarded and packet_dropped encapsulate key switch actions, enabling modularity and extensibility for more complex logic.
+###  `Filtering Function`
+```c
+fun bool filter_with_table(ip_t ip) {
+    bool r = Table.lookup(filter_table, {s=ip#src; d=ip#dst}, ());
+    return r;
+}
+```

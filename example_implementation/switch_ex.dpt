@@ -48,13 +48,14 @@ fun bool filter_with_table(ip_t ip) {
 
 /********** Handlers *********/
 handle eth_ip(eth_t eth, ip_t ip) {
-    // Forward the packet to OUT_PORT
-    generate_port(OUT_PORT, eth_ip(eth, ip));
-
     // Check if the packet matches the filter
     if (filter_with_table(ip)) {
+        // Forward the packet to OUT_PORT
+        generate_port(OUT_PORT, eth_ip(eth, ip));
+
         // Generate report if the packet matches the filter
         generate(prepare_report(eth, ip));
+
         // Handle packet forwarding
         generate(packet_forwarded(eth, ip));
     } else {
@@ -62,6 +63,7 @@ handle eth_ip(eth_t eth, ip_t ip) {
         generate(packet_dropped(eth, ip));
     }
 }
+
 
 handle prepare_report(eth_t eth, ip_t ip) {
     event r = report(ip#src, ip#dst, ip#len);
