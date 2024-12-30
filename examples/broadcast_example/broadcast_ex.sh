@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set environment variables for directory and file paths
-LUCID_DIR="../lucid"
-EXAMPLE_DIR="../example_implementation"
-DPT_FILE="$EXAMPLE_DIR/switch_ex.dpt"
-EXPECTED_FILE="$EXAMPLE_DIR/switch_ex_expected.txt"
+LUCID_DIR="../../lucid"
+EXAMPLE_DIR="../examples/broadcast_example"
+DPT_FILE="$EXAMPLE_DIR/broadcast_ex.dpt"
+EXPECTED_FILE="$EXAMPLE_DIR/broadcast_ex_expected.txt"
 
 # Change to the 'lucid' directory or exit if it fails
 cd "$LUCID_DIR" || { echo "Failed to change directory to '$LUCID_DIR'. Exiting."; exit 1; }

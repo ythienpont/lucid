@@ -1,0 +1,63 @@
+// This file assumes there are 5 switches, numbered 0 through 4.
+
+/*** Topology Definition ***/
+
+// Record type representing a mapping to a neighbor.
+type map_entry = { int port; bool is_valid; }
+
+// List of neighbors for a switch (assumes 5 neighbors max per switch).
+type neighbor_list = map_entry[5]
+
+// Define neighbors for each switch.
+const neighbor_list neighbors_0 = [
+  { port = 41; is_valid = true };  // Switch 0 connected to port 41 of switch 1
+  { port = 44; is_valid = true };  // Switch 0 connected to port 44 of switch 2
+  { port =  0; is_valid = false }; // Switch 0 not connected to switch 3
+  { port =  0; is_valid = false }; // Switch 0 not connected to switch 4
+  { port =  0; is_valid = false }; // Dummy entry
+];
+
+const neighbor_list neighbors_1 = [
+  { port = 40; is_valid = true };  // Switch 1 connected to port 40 of switch 0
+  { port =  0; is_valid = false }; // Switch 1 not connected to itself
+  { port = 43; is_valid = true };  // Switch 1 connected to port 43 of switch 2
+  { port = 47; is_valid = true };  // Switch 1 connected to port 47 of switch 3
+  { port =  0; is_valid = false }; // Switch 1 not connected to switch 4
+];
+
+// Repeat similar definitions for other switches.
+const neighbor_list neighbors_2 = neighbors_1; // Dummy value for simplicity.
+const neighbor_list neighbors_3 = neighbors_1; // Dummy value for simplicity.
+const neighbor_list neighbors_4 = neighbors_1; // Dummy value for simplicity.
+
+// Aggregate the neighbor lists into a topology map.
+type neighbor_map = neighbor_list[5]
+const neighbor_map topology = [neighbors_0; neighbors_1; neighbors_2; neighbors_3; neighbors_4];
+
+/*** Helper Function to Query Connections ***/
+fun int get_connected_port(int src, int output_port) {
+  // Match source switch and output port to determine the connected switch.
+  match (src, output_port) with
+  | 0, 41 -> { return 1; } // Switch 0 to Switch 1
+  | 0, 44 -> { return 2; } // Switch 0 to Switch 2
+  | 1, 43 -> { return 2; } // Switch 1 to Switch 2
+  | _     -> { return 99; } // No connection
+}
+
+/*** Broadcast Group ***/
+
+// Define a broadcast group containing all switches.
+const group broadcast_group = {0, 1, 2, 3, 4};
+
+/*** Event Definition ***/
+
+// Simple example event for demonstration.
+event broadcast_event();
+
+/*** Broadcast Example ***/
+handle broadcast_event() {
+  // Broadcast the event to all switches.
+  event b = broadcast_event();
+  b = Event.delay(b, 100);        // Delay by 100ns.
+  generate_ports(broadcast_group, b); // Send to all switches in the network.
+}

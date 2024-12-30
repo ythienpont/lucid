@@ -1,0 +1,10 @@
+{
+  "switches": 5,
+  "max time": 9999999,
+  "events": [
+    {
+      "name": "broadcast_event",
+      "args": []
+    }
+  ]
+}
