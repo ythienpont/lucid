@@ -1,11 +1,21 @@
-# Lucid
+# Understanding Lucid
 
-# Notes to myself
-- dpt stands for data plane threads and is the alternative name for lucid
-- lucid is event/handler based
-- Tofino is a P4-programmable Ethernet switch ASIC (Application-specific integrated circuit).
-    It is the main focus of the language since their developers have lots of experience with it
-- docker script only works in the lucid repo, fix this.
+Lucid is an event-driven framework designed for networking applications, providing an efficient way to handle data plane operations. It leverages the power of programmable networking hardware like the Tofino ASIC to achieve high performance and flexibility. Below are key concepts and notes about Lucid and its associated tools.
+
+
+## Key Concepts
+
+### 1. **Data Plane Threads (DPT)**
+- DPT stands for **Data Plane Threads**, an alternative name for Lucid.
+- It emphasizes threading mechanisms that operate in the data plane, ensuring high concurrency and performance.
+
+### 2. **Event/Handler-Based Architecture**
+- Lucid operates on an event-driven model.
+- Events are handled through dedicated handlers, enabling efficient and modular processing of network operations.
+
+### 3. **Tofino**
+- Tofino is a **P4-programmable Ethernet switch ASIC (Application-Specific Integrated Circuit)**.
+- It is a central focus for Lucid, as the developers have extensive experience with this hardware, making it well-integrated and optimized.
 
 
 ## Lucid Installation
