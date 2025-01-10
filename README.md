@@ -23,7 +23,10 @@ The Lucid interpreter can be run using a Docker container. To run a Lucid progra
 
 This command type-checks your program and runs it in a simulated network, as defined by your specification file.
 
-Try our [demo programs](https://github.com/ythienpont/lucid/tree/main/examples) by copying it inside the Lucid repository or you can start experimenting yourself with one of the tutorial programs ([monitor.dpt](https://github.com/PrincetonUniversity/lucid/blob/main/tutorials/interp/01monitor/monitor.dpt)).
+Try our [demo programs](https://github.com/ythienpont/lucid/tree/main/examples).
+Mae qure the lucid repository is included in your main directory and docker is up and running. By running the scripts in the examples,
+a text file with the terminal output and a directory with all the files needed for the complimentary p4 code will be generated.
+You can also start experimenting yourself with one of the tutorial programs ([monitor.dpt](https://github.com/PrincetonUniversity/lucid/blob/main/tutorials/interp/01monitor/monitor.dpt)).
 
 ## Syntax Highlighting
 ### VSCode
