@@ -3,7 +3,7 @@ This repository contains the resources for the **Future Internet 2024-2025** pre
 - The [demo code](https://github.com/ythienpont/lucid/tree/main/examples) used in the presentation
 - A [document](https://github.com/ythienpont/lucid/blob/main/paper_future_internet.pdf) containing instructions to run it
 - A [cheatsheet](https://github.com/ythienpont/lucid/blob/main/cheatsheet/cheatsheet.pdf) of the Lucid language
-- The slides of the presentation
+- The [slides](https://github.com/ythienpont/lucid/blob/main/slides/future-internet.pdf) of the presentation
 
 ## About Lucid
 Lucid is a high-level programming language designed to simplify the development of control applications in the data plane. By abstracting the complexities of languages like P4, Lucid enables:
