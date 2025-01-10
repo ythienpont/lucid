@@ -15,7 +15,7 @@ Lucid is a high-level programming language designed to simplify the development 
 Follow the installation instructions provided in the [Lucid repository](https://github.com/PrincetonUniversity/lucid/blob/main/readme.md).
 
 ### Running the Interpreter
-The Lucid interpreter can be run using a Docker container. To run a Lucid program:
+The Lucid interpreter can be run using a Docker container. To run a Lucid program, use this command included in the Lucid repository:
 
 ```bash
 ./docker_lucid.sh interpret <lucid program name>
