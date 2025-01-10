@@ -1,0 +1,4 @@
+// define handler for corresponding event
+handle foo(type1 id1, type2 id2, ...) { 
+  ... 
+}

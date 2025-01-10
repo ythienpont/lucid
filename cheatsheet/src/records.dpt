@@ -1,0 +1,8 @@
+// declare records
+{type1 label1; ...; typeN labelN}
+
+// create records
+{label1 = exp1; ...; labelN = expN}
+
+// same as foo except given values
+{foo with label3 = exp3'; label4 = exp4'}

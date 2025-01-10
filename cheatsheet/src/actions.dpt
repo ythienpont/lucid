@@ -1,0 +1,7 @@
+// actions are not constructed directly
+action_constr mk_my_acn(bool x) = {
+  return action res_t _ (int a) {
+    // single return statement
+    return {val = a; is_hit = x};
+  };
+};

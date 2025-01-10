@@ -1,0 +1,8 @@
+// defined throughout the program
+const <type> foo = ...;
+
+// each switch may have different values
+extern <type> foo;
+
+// extern, except values in .symb file
+symbolic <type> foo;

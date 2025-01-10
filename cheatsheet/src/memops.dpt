@@ -1,0 +1,32 @@
+// two arguments: two forms
+
+// single return
+memop foo(int mem, int local) { 
+    return <e>;
+}
+
+// single if with single return per branch
+memop foo(int mem, int local) { 
+    if (<e>) then { return <e>; } else { return <e>; }
+}
+
+
+// four arguments, structured like
+memop foo(int mem1, int mem2, int local1, int local2) {
+  bool b1 = <boolexp>; // May be omitted
+  bool b2 = <boolexp>; // May be omitted 
+
+  // Omitted entirely, or just else branch
+    if (<cond>) { cell1 = <ret_exp> } else 
+  { if (<cond>) { cell1 = <ret_exp> }
+  
+  // Omitted entirely, or just else branch
+    if (<cond>) { cell2 = <ret_exp> } else 
+  { if (<cond>) { cell2 = <ret_exp> }
+
+  // May be omitted. No else permitted
+  if (<cond>) { return <local_exp> }
+}
+
+// three arguments; no mem2
+memop foo(int mem, int loc1, int loc2)

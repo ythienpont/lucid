@@ -1,0 +1,13 @@
+// generate event
+generate(foo(a1, a2, ..., an));
+
+// call to previously declared parser
+my_parser(a1, a2, ..., an);
+
+// drop the packet
+drop;
+
+// branch to parse blocks
+match proto with 
+  | 0x800 -> {parse_ipv4(pkt);}
+  | _ -> {...}

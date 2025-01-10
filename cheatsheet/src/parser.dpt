@@ -1,0 +1,12 @@
+// example parser implementation
+parser main(bitstring pkt) {
+	int<48> d = read(pkt);
+	int<48> s = read(pkt);
+	int<16> t = read(pkt);
+	match t with
+		| LUCID_ETHERTY -> {do_lucid_parsing(pkt);}
+		| _ -> {
+      skip(32, pkt);
+      int<16> csum = hash<16>(checksum, d, s, t);
+			generate(eth_with_csum(csum, d, s, t, Payload.parse(pkt)));	}
+}

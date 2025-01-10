@@ -1,0 +1,20 @@
+// array with n entries of sz-bit ints
+global Array.t<<sz>> arr = Array.create(n)
+
+// return the value at index
+Array.get(arr, idx);
+
+// store the value at index
+Array.set(arr, idx, v);
+
+// apply memop setop to v using getarg
+Array.getm(arr, idx, getop, getarg);
+
+// apply memop setop to v using setarg
+Array.setm(arr, idx, setop, setarg);
+
+// return getop(v, getarg) and replace with setop(v, setarg)
+Array.update(arr, idx, getop, getarg, setop, setarg);
+
+// update for three-argument memop
+Array.update_complex(arr, idx, memop, arg1, arg2, default)

@@ -1,0 +1,8 @@
+// create a table
+global Table.t<<key_ty, data_ty, arg_ty, ret_ty>> t = Table.create(sz, actions, default_action, default_data);
+
+// table lookup
+ret_ty result = Table.lookup(t, key, arg);
+
+// install table entry; vendor dependent
+Table.install(t, key, acn, data);

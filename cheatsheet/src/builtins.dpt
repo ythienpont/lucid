@@ -1,0 +1,7 @@
+/* global */
+self // id of the switch
+recirculation_port
+
+/* local */
+this // event value that spawned handler
+ingress_port 

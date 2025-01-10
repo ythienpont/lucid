@@ -1,11 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SPDX-License-Identifier: Apache-2.0
+%
+% P4 Cheat Sheet
+%
+% By P4.org
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \documentclass{article}
+
+\usepackage{fontspec}
+\setmainfont{FreeSans}
+%\setsansfont{Free Helvetian}
+\setmonofont{Hack Nerd Font}
+
 \usepackage[landscape]{geometry}
 \usepackage{url}
 \usepackage{multicol}
 \usepackage{amsmath}
-\usepackage{esint}
 \usepackage{amsfonts}
 \usepackage{tikz}
+\usetikzlibrary{shapes}
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{amsmath,amssymb}
 
@@ -14,14 +29,45 @@
 \usepackage{mathtools}
 \usepackage{amsmath,amssymb}
 \usepackage{enumitem}
-\makeatletter
 
-\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
-\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
-\makeatother
+% Define Colors
+\usepackage{color}
+\definecolor{eclipseBlue}{RGB}{42,0.0,255}
+\definecolor{eclipseGreen}{RGB}{63,127,95}
+\definecolor{eclipsePurple}{RGB}{127,0,85}
+
+\usepackage{listings}
+
+% Define Language
+\lstdefinelanguage{p4}
+{
+  % list of keywords
+  morekeywords={
+    event, packet, parser, drop, match, bitstring, flood, Array, Counter, PairArray, Table, int, size, memop, fun, action_constr, void, bool, mevent, group, type, if, self, this, module, global, with, constr, for, size
+  },
+  sensitive=true, % keywords are case-sensitive
+  morecomment=[l]{//}, % l is for line comment
+  morecomment=[s]{/*}{*/}, % s is for start and end delimiter
+  morestring=[b]" % defines that strings are enclosed in double quotes
+}
+
+% Set Language
+\lstset{
+  language={p4},
+  basicstyle=\small\ttfamily, % Global Code Style
+  captionpos=b, % Position of the Caption (t for top, b for bottom)
+  extendedchars=true, % Allows 256 instead of 128 ASCII characters
+  tabsize=2, % number of spaces indented when discovering a tab
+  columns=fixed, % make all characters equal width
+  keepspaces=true, % does not ignore spaces to fit width, convert tabs to spaces
+  showstringspaces=false, % lets spaces in strings appear as real spaces
+  breaklines=true, % wrap lines if they don't fit
+  commentstyle=\color{eclipseBlue}, % style of comments
+  keywordstyle=\color{eclipsePurple}, % style of keywords
+  stringstyle=\color{eclipseGreen}, % style of strings
+}
 
 \title{Lucid Cheat Sheet}
-\usepackage[utf8]{inputenc}
 
 \advance\topmargin-.8in
 \advance\textheight3in
@@ -34,79 +80,199 @@
 %\colorbox[HTML]{e4e4e4}{\makebox[\textwidth-2\fboxsep][l]{texto}
 \begin{document}
 
-\begin{center}{\huge{\textbf{Lucid Cheat Sheet}}}\\
+\begin{center}{\huge{\bf \textsf{Lucid Language Cheat Sheet}}}\\[.5em]
+%{\large By P4.org}
 \end{center}
 \begin{multicols*}{3}
 
 \tikzstyle{mybox} = [draw=black, fill=white, very thick,
     rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
 \tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
+\tikzstyle{mybox2} = [draw=black, fill=white, very thick, rectangle split,
+    rectangle split parts=2,
+    rounded corners, inner sep=10pt, inner ysep=10pt]
+\tikzstyle{fancytitle2} =[fill=black, text=white, font=\bfseries]
 
-\tikzstyle{mybox} = [draw=black, fill=white, very thick,
-    rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
-\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
-
-%------------ Event Declarations ---------------
+%------------ Events ---------------
 \begin{tikzpicture}
 \node [mybox] (box){%
-    \begin{minipage}{0.45\textwidth}
-\texttt{event foo(type1 id1, type2 id2, ..., typeN idN);}
-\vspace{5pt}
-
-Declares an event named \texttt{foo} that takes arguments \texttt{id1, id2, ..., idN} of types \texttt{type1, type2, ..., typeN}.
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/events.dpt}
     \end{minipage}
 };
-\node[fancytitle, right=10pt] at (box.north west) {Event Declarations};
+\node[fancytitle, right=10pt] at (box.north west) {Events};
 \end{tikzpicture}
 
-%------------ Event Values ---------------
+%------------ Parser ---------------
 \begin{tikzpicture}
 \node [mybox] (box){%
-    \begin{minipage}{0.45\textwidth}
-\texttt{event x = foo(arg1, arg2, ..., argN);}
-\vspace{5pt}
-
-Creates an event value of type \texttt{foo} containing \texttt{arg1, arg2, ..., argN} and stores it in variable \texttt{x}.
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/parser.dpt}
     \end{minipage}
 };
-\node[fancytitle, right=10pt] at (box.north west) {Event Values};
+\node[fancytitle, right=10pt] at (box.north west) {Parser Declarations};
 \end{tikzpicture}
 
-%------------ Event Generation ---------------
+%------------ Parser Actions---------------
 \begin{tikzpicture}
 \node [mybox] (box){%
-    \begin{minipage}{0.55\textwidth}
-Events are generated using \textbf{generate} statements to serialize events and send them to queues. Types include:
-
-\begin{itemize}[leftmargin=10pt]
-\item \texttt{generate\_port(n, x);} \\ 
-Serializes event \texttt{x} into a packet and sends it to port \texttt{n}.
-\item \texttt{generate\_ports(g, x);} \\ 
-Sends event \texttt{x} to all ports in group \texttt{g}.
-\item \texttt{generate(x);} \\ 
-Queues event \texttt{x} for recirculation on the current switch
-\end{itemize}
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/parser_actions.dpt}
     \end{minipage}
 };
-\node[fancytitle, right=10pt] at (box.north west) {Event Generation};
+\node[fancytitle, right=10pt] at (box.north west) {Parser Actions};
 \end{tikzpicture}
 
-%------------ Packet Events ---------------
+%------------ Parser Steps---------------
 \begin{tikzpicture}
 \node [mybox] (box){%
-    \begin{minipage}{0.55\textwidth}
-\texttt{packet event foo(type1 id1, type2 id2, ..., typeN idN);}
-\vspace{5pt}
-
-Defines a packet-based event \texttt{foo} where arguments \texttt{id1, id2, ..., idN} are packed directly into the packet. Example:
-
-\texttt{packet event eth\_ip(eth\_hdr\_t eth, ip\_hdr\_t ip, Payload.t pl);}
-
-Enables creation of standard IP packets but requires custom parsers for deserialization.
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/parser_steps.dpt}
     \end{minipage}
 };
-\node[fancytitle, right=10pt] at (box.north west) {Packet Events};
-
+\node[fancytitle, right=10pt] at (box.north west) {Parser Steps};
 \end{tikzpicture}
+
+%------------ Handlers ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/handlers.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Handlers};
+\end{tikzpicture}
+
+%------------ Arrays ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/arrays.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Arrays};
+\end{tikzpicture}
+
+%------------ Tables ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/tables.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Tables};
+\end{tikzpicture}
+
+%------------ Memops ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/memops.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Memops};
+\end{tikzpicture}
+
+%------------ Functions ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/functions.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Functions};
+\end{tikzpicture}
+
+%------------ Functions ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/actions.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Actions};
+\end{tikzpicture}
+
+%------------ Match ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/match.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Match};
+\end{tikzpicture}
+
+%------------ Constants ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/constants.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Constants, Externs and Symbolics};
+\end{tikzpicture}
+
+%------------ Groups ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/groups.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Groups};
+\end{tikzpicture}
+
+%------------ Records ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/records.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Records};
+\end{tikzpicture}
+
+%------------ Types ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/types.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Types};
+\end{tikzpicture}
+
+%------------ Vectors ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/vectors.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Vectors and Loops};
+\end{tikzpicture}
+
+%------------ Builtins ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/builtins.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Builtins};
+\end{tikzpicture}
+
+%------------ Misc ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \lstinputlisting{src/misc.dpt}
+    \end{minipage}
+};
+\node[fancytitle, right=10pt] at (box.north west) {Miscellaneous};
+\end{tikzpicture}
+
+
 \end{multicols*}
 \end{document}

@@ -1,0 +1,12 @@
+// c-like printf function
+printf("Is %d > 10? %b", 3, 3 > 10);
+
+// return size-bit int hash
+hash<<size>>(seed, arg1, arg2, ...);
+
+// standard ipv4 1s-complement checksum
+hash<16>(checksum, arg1, arg2, ...);
+
+/* system functions */
+Sys.time(); // elapsed time in ns
+Sys.random(); // random 32-bit int 

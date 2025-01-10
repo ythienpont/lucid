@@ -1,0 +1,6 @@
+// represent TCAM tables with static rules
+match (e1, ..., eN) with 
+  | 42      -> { ... } // integers
+  | 0b**10  -> { ... } // bitstrings
+  | foo     -> { ... } // variables
+  | _       -> { ... } // wildcard

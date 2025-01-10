@@ -1,0 +1,8 @@
+// vector (immutable size)
+int[4] v = [0; 3; 5; 7];
+
+// get value at index
+int i = v[2];
+
+// loop (var is size type)
+for (var < size) { ... }

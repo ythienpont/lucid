@@ -1,0 +1,8 @@
+// read from bitstring
+read(pkt);
+
+// pop n bits off bitstring
+skip(n, pkt);
+
+// computes the n-bit checksum
+hash<n>(checksum, a1, a2, ..., an);

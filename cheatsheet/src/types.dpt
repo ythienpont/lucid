@@ -1,0 +1,13 @@
+// user types, like C structs
+type foo = {
+  int<48> bar;
+  int<16> baz;
+}
+
+// constructor, necessary for global types
+constr <type> foo(<args>) = <expression>
+
+global my_type x = constr_name(<<args>>)
+
+// user defined size
+size a = 16;

@@ -1,0 +1,17 @@
+// declare a kind of event 
+event foo(type1 id1, type2 id2, ...);
+
+// create an event value
+event x = foo(arg1, arg2, ..., argN);
+
+// pack arguments directly into packet
+packet event foo(type1 id1, ...);
+
+// send event to port n
+generate_port(n, x);
+
+// send event to switches in group g
+generate_port(g, x);
+
+// queue event for recirculation
+generate(x);

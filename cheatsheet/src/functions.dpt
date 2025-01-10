@@ -1,0 +1,3 @@
+// functions may contain arbitrary statements
+fun rty foo(type1 idN, ..., typeN idN) { ... 
+}

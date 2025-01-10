@@ -1,0 +1,5 @@
+// set of ports, must be const ints
+{0, 4, 7}
+
+// generate group for all ports except x
+flood x
